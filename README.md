@@ -70,7 +70,7 @@ LICENSE           MIT
 ## Installation
 
 ```bash
-git clone <this-repository>
+git clone https://github.com/NipaAnjum/MI-CNN.git
 cd MI-CNN
 pip install -r requirements.txt
 ```
@@ -179,9 +179,9 @@ The scenario run also writes a **per-sub-scenario breakdown**, which reports the
 
 This code reproduces the published experiments exactly, which means it also reproduces their design choices. The following are properties of the protocol that a reader should know about; they are documented here rather than quietly changed, because changing them would no longer reproduce the paper.
 
-**Class balancing happens before windowing, so control windows are not contiguous in time.** Downsampling removes individual class-0 *samples*, and windows are cut from what remains. A perturbed window really is 100 consecutive samples (~1.67 s, verified). A control window is 100 consecutive *retained rows*, which on the real dataset spans a median of roughly 5–14 s of wall clock depending on the participant, with gaps. The "~1.67 s" figure therefore describes the perturbed class, not both.
+**Class balancing happens before windowing, so control windows are not contiguous in time.** Downsampling removes individual class-0 *samples*, and windows are cut from what remains. A perturbed window really is 100 consecutive samples (~1.67 s, confirmed by measuring the released data). A control window is 100 consecutive *retained rows*, which on the real dataset spans a median of roughly 5–14 s of wall clock depending on the participant, with gaps. The "~1.67 s" figure therefore describes the perturbed class, not both.
 
-We checked whether this is exploitable. The inter-sample time gap alone separates the classes at ~0.98 AUC, which is exactly why timestamps are excluded from the features. From the sensor channels themselves, the obvious proxies for the dilation are weak: mean absolute lag-1 difference per window gives 0.43 AUC and within-window variance 0.50, against the 0.968 accuracy the model achieves. So the artifact is unlikely to explain the results, though this is evidence rather than proof. Cutting windows before balancing would avoid the issue entirely and is the recommended design for follow-up work.
+We checked whether this is exploitable. The figures below come from a diagnostic run on this pipeline and are not results reported in the paper. The inter-sample time gap alone separates the classes at ~0.98 AUC, which is exactly why timestamps are excluded from the features. From the sensor channels themselves, the obvious proxies for the dilation are weak: mean absolute lag-1 difference per window gives 0.43 AUC and within-window variance 0.50, against the 0.968 accuracy the model achieves. So the artifact is unlikely to explain the results, though this is evidence rather than proof. Cutting windows before balancing would avoid the issue entirely and is the recommended design for follow-up work.
 
 **Early stopping uses the tail of the training fold, not a stratified sample.** Keras's `validation_split` takes the last 10% of rows *before* shuffling, and the fold arrays are ordered rather than shuffled. Two consequences:
 
@@ -214,8 +214,6 @@ If you use this code, please cite the paper:
   organization = {IEEE}
 }
 ```
-
-Add the `pages` field once the proceedings pagination is available.
 
 Please also cite the dataset authors if you use the data:
 
