@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# Data and model artifacts are not distributed with this repository.
+*.csv
+*.npy
+*.keras
+*.h5
+*.joblib
+results/
